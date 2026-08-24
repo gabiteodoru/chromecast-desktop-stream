@@ -7,6 +7,16 @@ apps, just `ffmpeg` and Python.
 Python script serves that stream over HTTP and tells a Chromecast on your
 network to play it. That's the whole stack.
 
+## Latency
+
+On my machine there's about a **5 second delay** between what's on screen
+and what shows up on the Chromecast (this is inherent to HLS — segment
+duration plus buffering, not something easily tuned away). That makes it a
+poor fit for anything needing tight sync, but I've been using it as a
+"delay cam" alongside OBS Studio — e.g. reviewing your own gameplay or
+presentation a few seconds after the fact on a second screen. If low
+latency matters for your use case, this probably isn't the right tool.
+
 ## Requirements
 
 - Windows
