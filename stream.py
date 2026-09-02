@@ -233,11 +233,18 @@ def main():
     finally:
         stop_flag.set()
         print("Shutting down...")
-        mc.stop()
-        httpd.shutdown()
-        browser.stop_discovery()
-        stop_ffmpeg(ffmpeg_proc)
-        cleanup_stream_files(STREAM_DIR)
+
+        def safe(step_name, fn):
+            try:
+                fn()
+            except Exception as e:
+                print(f"(ignoring error while {step_name}: {e})")
+
+        safe("stopping cast session", mc.stop)
+        safe("shutting down HTTP server", httpd.shutdown)
+        safe("stopping Chromecast discovery", browser.stop_discovery)
+        safe("stopping ffmpeg", lambda: stop_ffmpeg(ffmpeg_proc))
+        safe("cleaning up stream files", lambda: cleanup_stream_files(STREAM_DIR))
         print("Done.")
 
 
